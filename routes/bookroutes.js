@@ -1,10 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
-router.get('/' , (req,res) => {
-    res.json({
-        message: "Welcome to Library Book Manager API"
-    })
-})
+const {getAllbooks} = require('../controllers/bookControllers')
+router.get('/' , getAllbooks)
 
 module.exports = router
