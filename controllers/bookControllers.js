@@ -12,7 +12,7 @@ const getBookbyId = (req, res) => {
 
   const getBookId = book.find((book) => book.id === id);
   if (!getBookId) {
-   return res.status(404).json({
+    return res.status(404).json({
       message: "book is not found",
     });
   }
@@ -23,7 +23,22 @@ const getBookbyId = (req, res) => {
   });
 };
 
+const addBook = (req, res) => {
+  const newId = book.length + 1;
+  const newBook = {
+    id: newId,
+    ...req.body,
+  };
+  book.push(newBook);
+
+  res.status(201).json({
+    message: "Book is added in the Library",
+    data: newBook,
+  });
+};
+
 module.exports = {
   getAllbooks,
   getBookbyId,
+  addBook,
 };
