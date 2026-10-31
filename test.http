@@ -15,4 +15,4 @@
 # }
 
 
-DELETE http://localhost:3000/books/1
+GET http://localhost:3000/books?author=James%20Clear

@@ -1,9 +1,27 @@
 const book = require("../data/book");
 
 const getAllbooks = (req, res) => {
+  const bookauthor = req.query.author;
+
+  if (!bookauthor) {
+    return res.status(200).json({
+      message: "All books retrieved successfully",
+      data: book,
+    });
+  }
+
+  const filterbook = book.filter(
+    (book) => book.author.toLowerCase() === bookauthor.toLowerCase(),
+  );
+
+  if (filterbook.length === 0) {
+    return res.status(404).json({
+      message: "Book Match not found",
+    });
+  }
   res.status(200).json({
-    message: "All books retrived sucessfully",
-    data: book,
+    message: "book match is found",
+    data: filterbook,
   });
 };
 
@@ -79,10 +97,11 @@ const deleteBook = (req, res) => {
     data: removedBook,
   });
 };
+
 module.exports = {
   getAllbooks,
   getBookbyId,
   addBook,
   updateBook,
-  deleteBook
+  deleteBook,
 };
