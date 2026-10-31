@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const validateBook = require("../middleware/validateBook");
 const {
   getAllbooks,
   getBookbyId,
@@ -9,6 +9,6 @@ const {
 
 router.get("/", getAllbooks);
 router.get("/:id", getBookbyId);
-router.post("/", addBook);
+router.post("/", validateBook, addBook);
 
 module.exports = router;
