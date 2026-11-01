@@ -15,4 +15,5 @@
 # }
 
 
-GET http://localhost:3000/books?author=James%20Clear
+
+GET http://localhost:3000/books?author=James%20Clear&page=2&limit=3

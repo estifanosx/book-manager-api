@@ -1,29 +1,61 @@
 const book = require("../data/book");
 
+
 const getAllbooks = (req, res) => {
+ 
   const bookauthor = req.query.author;
+  const page = Number(req.query.page || 1);
+  const limit = Number(req.query.limit || 3);
 
-  if (!bookauthor) {
-    return res.status(200).json({
-      message: "All books retrieved successfully",
-      data: book,
+  
+  if (
+    !Number.isInteger(page) ||
+    !Number.isInteger(limit) ||
+    page < 1 ||
+    limit < 1
+  ) {
+    return res.status(400).json({
+      message: "Page and limit must be positive integers",
     });
   }
 
-  const filterbook = book.filter(
-    (book) => book.author.toLowerCase() === bookauthor.toLowerCase(),
-  );
+ 
+  let filteredBooks = book;
 
-  if (filterbook.length === 0) {
+ 
+  if (bookauthor) {
+    filteredBooks = book.filter(
+      (item) => item.author.toLowerCase() === bookauthor.toLowerCase(),
+    );
+  }
+
+
+  const startingIndex = (page - 1) * limit;
+  const totalBooks = filteredBooks.length;
+  const totalPages = Math.ceil(totalBooks / limit);
+
+  
+  if (page > totalPages && totalBooks > 0) {
     return res.status(404).json({
-      message: "Book Match not found",
+      message: "Page not found",
+      totalPages,
     });
   }
-  res.status(200).json({
-    message: "book match is found",
-    data: filterbook,
+
+  
+  const result = filteredBooks.slice(startingIndex, startingIndex + limit);
+
+ 
+  return res.status(200).json({
+    message: "Books retrieved successfully",
+    currentPage: page,
+    limit: limit,
+    totalBooks: totalBooks,
+    totalPages: totalPages,
+    data: result,
   });
 };
+
 
 const getBookbyId = (req, res) => {
   const id = Number(req.params.id);
