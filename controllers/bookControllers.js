@@ -20,7 +20,7 @@ const getAllbooks = (req, res) => {
   }
 
  
-  let filteredBooks = book;
+  // let filteredBooks = book;
 
  
   if (bookauthor) {
