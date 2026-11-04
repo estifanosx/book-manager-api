@@ -1,11 +1,12 @@
 const express = require("express");
 const bookRoutes = require("./routes/bookRoutes.js");
 const errorHandler = require("./middleware/errorHandler.js");
+const logger = require("./middleware/logger.js");
 
 const app = express();
 
 app.use(express.json());
-
+app.use(logger);
 app.use("/books", bookRoutes);
 app.use(errorHandler);
 
