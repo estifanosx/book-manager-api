@@ -1,12 +1,12 @@
-const express = require('express' )
-const bookRoutes = require('./routes/bookRoutes.js');
+const express = require("express");
+const bookRoutes = require("./routes/bookRoutes.js");
+const errorHandler = require("./middleware/errorHandler.js");
 
+const app = express();
 
-const app  = express()
+app.use(express.json());
 
-app.use(express.json())
+app.use("/books", bookRoutes);
+app.use(errorHandler);
 
-app.use('/books' , bookRoutes)
-
-
-module.exports = app
+module.exports = app;

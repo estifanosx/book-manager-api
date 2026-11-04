@@ -1,13 +1,10 @@
 const book = require("../data/book");
 
-
 const getAllbooks = (req, res) => {
- 
   const bookauthor = req.query.author;
   const page = Number(req.query.page || 1);
   const limit = Number(req.query.limit || 3);
 
-  
   if (
     !Number.isInteger(page) ||
     !Number.isInteger(limit) ||
@@ -19,22 +16,18 @@ const getAllbooks = (req, res) => {
     });
   }
 
- 
   // let filteredBooks = book;
 
- 
   if (bookauthor) {
     filteredBooks = book.filter(
       (item) => item.author.toLowerCase() === bookauthor.toLowerCase(),
     );
   }
 
-
   const startingIndex = (page - 1) * limit;
   const totalBooks = filteredBooks.length;
   const totalPages = Math.ceil(totalBooks / limit);
 
-  
   if (page > totalPages && totalBooks > 0) {
     return res.status(404).json({
       message: "Page not found",
@@ -42,10 +35,8 @@ const getAllbooks = (req, res) => {
     });
   }
 
-  
   const result = filteredBooks.slice(startingIndex, startingIndex + limit);
 
- 
   return res.status(200).json({
     message: "Books retrieved successfully",
     currentPage: page,
@@ -56,15 +47,15 @@ const getAllbooks = (req, res) => {
   });
 };
 
-
-const getBookbyId = (req, res) => {
+const getBookbyId = (req, res,next) => {
   const id = Number(req.params.id);
 
   const getBookId = book.find((book) => book.id === id);
+
   if (!getBookId) {
-    return res.status(404).json({
-      message: "book is not found",
-    });
+    const error = new Error("book is not found");
+    error.statuscode = 404;
+    return next(error);
   }
 
   res.status(200).json({
